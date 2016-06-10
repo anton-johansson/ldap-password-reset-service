@@ -2,6 +2,7 @@ package com.antonjohansson.lprs.controller;
 
 import static com.google.inject.Scopes.SINGLETON;
 
+import com.antonjohansson.lprs.controller.configuration.ConfigurationModule;
 import com.google.inject.AbstractModule;
 
 /**
@@ -13,5 +14,6 @@ public class ControllerModule extends AbstractModule
     protected void configure()
     {
         bind(ILdapFactory.class).to(LdapFactory.class).in(SINGLETON);
+        install(new ConfigurationModule());
     }
 }
