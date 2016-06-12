@@ -9,7 +9,9 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
+import com.antonjohansson.lprs.controller.configuration.Configuration;
 import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 
 /**
@@ -17,8 +19,6 @@ import com.google.inject.servlet.GuiceFilter;
  */
 public class Application
 {
-    private static final int PORT = 8080;
-
     /**
      * The application main entry-point.
      */
@@ -26,14 +26,15 @@ public class Application
     {
         try
         {
-            Guice.createInjector(new ServiceModule());
+            Injector injector = Guice.createInjector(new ServiceModule());
+            Configuration configuration = injector.getInstance(Configuration.class);
 
             ServletContextHandler handler = new ServletContextHandler(SESSIONS);
             handler.setContextPath("/");
             handler.addFilter(GuiceFilter.class, "/*", allOf(DispatcherType.class));
             handler.addServlet(DefaultServlet.class, "/");
 
-            Server server = new Server(PORT);
+            Server server = new Server(configuration.getPort());
             server.setHandler(handler);
             server.start();
             server.join();

@@ -9,6 +9,8 @@ import java.util.Optional;
  */
 public final class Configuration
 {
+    private static final int DEFAULT_PORT = 8080;
+    static final String PORT = "port";
     static final String PROVIDER_URL = "providerURL";
     static final String DOMAIN = "domain";
     static final String USERNAME = "username";
@@ -19,6 +21,28 @@ public final class Configuration
     Configuration(Map<String, String> configuration)
     {
         this.configuration = new HashMap<>(configuration);
+    }
+
+    /**
+     * Gets the web server port.
+     */
+    public int getPort()
+    {
+        int port = DEFAULT_PORT;
+        String portValue = configuration.get(PORT);
+        if (portValue == null)
+        {
+            return port;
+        }
+        try
+        {
+            port = Integer.parseInt(portValue);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return port;
     }
 
     public String getProviderURL()
