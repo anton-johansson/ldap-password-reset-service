@@ -8,11 +8,12 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import com.antonjohansson.lprs.controller.Ldap;
 import com.antonjohansson.lprs.controller.ILdapFactory;
+import com.antonjohansson.lprs.controller.Ldap;
 import com.antonjohansson.lprs.controller.token.ConsoleTokenSender;
 import com.antonjohansson.lprs.controller.token.ITokenSender;
 import com.antonjohansson.lprs.controller.token.TokenGenerator;
+import com.antonjohansson.lprs.controller.validation.IValidationModel;
 import com.antonjohansson.lprs.model.User;
 import com.vaadin.ui.Layout;
 
@@ -22,24 +23,35 @@ import com.vaadin.ui.Layout;
 class ServicePresenter implements IServicePresenter
 {
     private final ServiceView view;
+    private final ErrorView errorView;
     private final ILdapFactory ldapFactory;
     private final Feedback feedback;
     private final ITokenSender tokenSender = new ConsoleTokenSender();
+    private final IValidationModel validationModel;
     private String token = "";
     private User user;
 
     @Inject
-    ServicePresenter(ServiceView view, ILdapFactory ldapFactory, Feedback feedback)
+    ServicePresenter(ServiceView view, ErrorView errorView, ILdapFactory ldapFactory, Feedback feedback, IValidationModel validationModel)
     {
         this.view = view;
+        this.errorView = errorView;
         this.ldapFactory = ldapFactory;
         this.feedback = feedback;
+        this.validationModel = validationModel;
     }
 
     @Override
     public Layout getView()
     {
-        return view;
+        if (validationModel.isValid())
+        {
+            return view;
+        }
+        else
+        {
+            return errorView;
+        }
     }
 
     @Override
@@ -52,6 +64,8 @@ class ServicePresenter implements IServicePresenter
         view.setPassword.addClickListener(e -> setPassword());
 
         view.show(REQUEST_TOKEN);
+
+        errorView.setValidationErrors(validationModel.getValidationErrors());
     }
 
     private void requestToken()

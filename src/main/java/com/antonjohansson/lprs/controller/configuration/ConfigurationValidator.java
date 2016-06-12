@@ -5,6 +5,7 @@ import static com.antonjohansson.lprs.controller.configuration.Configuration.PAS
 import static com.antonjohansson.lprs.controller.configuration.Configuration.PROVIDER_URL;
 import static com.antonjohansson.lprs.controller.configuration.Configuration.USERNAME;
 
+import com.antonjohansson.lprs.controller.validation.IValidationModel;
 import com.google.inject.Inject;
 
 /**
@@ -13,11 +14,13 @@ import com.google.inject.Inject;
 class ConfigurationValidator
 {
     private final Configuration configuration;
+    private final IValidationModel model;
 
     @Inject
-    ConfigurationValidator(Configuration configuration)
+    ConfigurationValidator(Configuration configuration, IValidationModel model)
     {
         this.configuration = configuration;
+        this.model = model;
         validate();
     }
 
@@ -33,7 +36,7 @@ class ConfigurationValidator
     {
         if (!configuration.get(key).isPresent())
         {
-            throw new IllegalStateException("The key '" + key + "' is required in the configuration");
+            model.addValidationError("The key '" + key + "' is required in the configuration");
         }
     }
 }
