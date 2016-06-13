@@ -150,6 +150,16 @@
                 </configuration>
             </plugin>
 
+            <!-- Run in development mode -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <scanIntervalSeconds>2</scanIntervalSeconds>
+                </configuration>
+            </plugin>
+
             <!-- Create a runnable JAR -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
