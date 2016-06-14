@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.antonjohansson.lprs.controller.token.ConsoleTokenSender;
+
 /**
  * Contains application configuration.
  */
@@ -26,7 +28,7 @@ public final class Configuration
 {
     private static final int DEFAULT_PORT = 8080;
     static final String PORT = "port";
-    static final String PROVIDER_URL = "providerURL";
+    static final String PROVIDER_URL = "provider-url";
     static final String DOMAIN = "domain";
     static final String USERNAME = "username";
     static final String PASSWORD = "password";
@@ -78,6 +80,11 @@ public final class Configuration
     public String getPassword()
     {
         return configuration.get(PASSWORD);
+    }
+
+    public String getTokenSender()
+    {
+        return configuration.getOrDefault("token-sender", ConsoleTokenSender.class.getSimpleName());
     }
 
     /**

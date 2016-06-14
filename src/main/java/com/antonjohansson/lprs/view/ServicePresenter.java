@@ -25,7 +25,6 @@ import javax.inject.Inject;
 
 import com.antonjohansson.lprs.controller.ILdapFactory;
 import com.antonjohansson.lprs.controller.Ldap;
-import com.antonjohansson.lprs.controller.token.ConsoleTokenSender;
 import com.antonjohansson.lprs.controller.token.ITokenSender;
 import com.antonjohansson.lprs.controller.token.TokenGenerator;
 import com.antonjohansson.lprs.controller.validation.IValidationModel;
@@ -41,18 +40,24 @@ class ServicePresenter implements IServicePresenter
     private final ErrorView errorView;
     private final ILdapFactory ldapFactory;
     private final Feedback feedback;
-    private final ITokenSender tokenSender = new ConsoleTokenSender();
+    private final ITokenSender tokenSender;
     private final IValidationModel validationModel;
     private String token = "";
     private User user;
 
     @Inject
-    ServicePresenter(ServiceView view, ErrorView errorView, ILdapFactory ldapFactory, Feedback feedback, IValidationModel validationModel)
+    ServicePresenter(
+            ServiceView view,
+            ErrorView errorView, ILdapFactory ldapFactory,
+            Feedback feedback,
+            ITokenSender tokenSender,
+            IValidationModel validationModel)
     {
         this.view = view;
         this.errorView = errorView;
         this.ldapFactory = ldapFactory;
         this.feedback = feedback;
+        this.tokenSender = tokenSender;
         this.validationModel = validationModel;
     }
 
