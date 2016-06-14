@@ -17,6 +17,7 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -30,6 +31,8 @@
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Anton Johansson :: LDAP Password Reset Service</name>
+    <description>Provides a web GUI for resetting an LDAP account's password.</description>
+    <url>https://github.com/anton-johansson/ldap-password-reset-service</url>
 
     <properties>
         <!-- Dependencies -->
@@ -178,6 +181,7 @@
                         <exclude>README.md</exclude>
                         <exclude>LICENSE</exclude>
                         <exclude>.checkstyle</exclude>
+                        <exclude>src/deb/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -219,6 +223,83 @@
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Build a debian package -->
+            <plugin>
+                <artifactId>jdeb</artifactId>
+                <groupId>org.vafer</groupId>
+                <version>1.4</version>
+                <configuration>
+                    <dataSet>
+                        <!-- Template folders -->
+                        <data>
+                            <type>template</type>
+                            <paths>
+                                <path>etc/${project.artifactId}</path>
+                                <path>var/lib/${project.artifactId}</path>
+                                <path>var/log/${project.artifactId}</path>
+                            </paths>
+                            <mapper>
+                                <type>perm</type>
+                                <user>brooklyn</user>
+                                <group>brooklyn</group>
+                            </mapper>
+                        </data>
+
+                        <!-- License -->
+                        <data>
+                            <src>${basedir}/LICENSE</src>
+                            <type>file</type>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>/var/lib/${project.artifactId}/doc</prefix>
+                            </mapper>
+                        </data>
+
+                        <!-- Initiation script -->
+                        <data>
+                            <src>${basedir}/src/deb/init.d/${project.artifactId}</src>
+                            <type>file</type>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>/etc/init.d</prefix>
+                                <filemode>755</filemode>
+                            </mapper>
+                        </data>
+
+                        <!-- The JAR file -->
+                        <data>
+                            <src>${project.build.directory}/${project.build.finalName}-jar-with-dependencies.jar</src>
+                            <dst>${project.artifactId}.jar</dst>
+                            <type>file</type>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>/var/lib/${project.artifactId}/bin</prefix>
+                            </mapper>
+                        </data>
+
+                        <!-- Configuration file -->
+                        <data>
+                            <src>${basedir}/src/deb/conf/${project.artifactId}.conf</src>
+                            <type>file</type>
+                            <conffile>true</conffile>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>/etc/${project.artifactId}</prefix>
+                                <filemode>600</filemode>
+                            </mapper>
+                        </data>
+                    </dataSet>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jdeb</goal>
                         </goals>
                     </execution>
                 </executions>
