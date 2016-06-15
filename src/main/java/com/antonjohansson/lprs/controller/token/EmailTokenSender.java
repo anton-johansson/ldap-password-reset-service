@@ -18,13 +18,44 @@ package com.antonjohansson.lprs.controller.token;
 import com.antonjohansson.lprs.model.User;
 
 /**
- * {@link ITokenSender} implementation that prints the token to the console.
+ * {@link ITokenSender} implementation that sends the token in an e-mail.
  */
-class ConsoleTokenSender implements ITokenSender
+public class EmailTokenSender extends AEmailTokenSender
 {
-    @Override
-    public void send(User user, String token)
+    private String from;
+
+    public void setFrom(String from)
     {
-        System.out.println("Generated token '" + token + "'.");
+        this.from = from;
+    }
+
+    @Override
+    protected String getFrom()
+    {
+        return from;
+    }
+
+    @Override
+    protected String getTo(User user)
+    {
+        return user.getMail();
+    }
+
+    @Override
+    protected String getSubject()
+    {
+        return "Password Reset";
+    }
+
+    @Override
+    protected String getBody(String token)
+    {
+        return "Your token is '" + token + "'";
+    }
+
+    @Override
+    protected String getContentType()
+    {
+        return "text/plain";
     }
 }

@@ -15,11 +15,14 @@
  */
 package com.antonjohansson.lprs.controller.configuration;
 
+import static java.util.stream.Collectors.toSet;
+
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
-
-import com.antonjohansson.lprs.controller.token.ConsoleTokenSender;
+import java.util.Set;
 
 /**
  * Contains application configuration.
@@ -82,9 +85,34 @@ public final class Configuration
         return configuration.get(PASSWORD);
     }
 
-    public String getTokenSender()
+    /**
+     * Gets a value, or a default value if the given key does not exist.
+     *
+     * @param key The key to get value for.
+     * @param defaultValue The default value to fall back to.
+     * @return Returns the value.
+     */
+    public String getOrDefault(String key, String defaultValue)
     {
-        return configuration.getOrDefault("token-sender", ConsoleTokenSender.class.getSimpleName());
+        return configuration.getOrDefault(key, defaultValue);
+    }
+
+    /**
+     * Returns a set of sub-properties for a given prefix.
+     *
+     * @param prefix The prefix to get sub-properties for.
+     * @return Returns all the sub-properties.
+     */
+    public Set<Entry<String, String>> getSubProperties(String prefix)
+    {
+        return configuration
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().startsWith(prefix))
+                .map(entry -> new AbstractMap.SimpleEntry<>(
+                        entry.getKey().substring(prefix.length()),
+                        entry.getValue()))
+                .collect(toSet());
     }
 
     /**
