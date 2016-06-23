@@ -123,8 +123,8 @@ class ServicePresenter implements IServicePresenter
         this.token = TokenGenerator.generate();
         tokenSender.send(user, token);
 
-        String greeting = "Greetings, " + user.getName() + "! Check your phone.";
-        view.greeting.setValue(greeting);
+        String greeting = "Greetings, " + user.getName() + "! " + tokenSender.getSuccessMessage();
+        view.greeting.setValue(greeting.trim());
         view.show(USE_TOKEN);
     }
 

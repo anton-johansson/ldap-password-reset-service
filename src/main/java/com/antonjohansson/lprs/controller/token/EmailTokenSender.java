@@ -58,4 +58,10 @@ public class EmailTokenSender extends AEmailTokenSender
     {
         return "text/plain";
     }
+
+    @Override
+    public String getSuccessMessage()
+    {
+        return "Check your e-mail.";
+    }
 }

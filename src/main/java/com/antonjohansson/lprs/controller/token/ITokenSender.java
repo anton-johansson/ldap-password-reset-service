@@ -29,4 +29,15 @@ public interface ITokenSender
      * @param token The token to send.
      */
     void send(User user, String token);
+
+    /**
+     * Gets the message that is shown when a token is successfully sent, for
+     * example "Check your phone.".
+     *
+     * @return Returns the message to show upon success.
+     */
+    default String getSuccessMessage()
+    {
+        return "";
+    }
 }
