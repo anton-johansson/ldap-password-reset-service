@@ -98,6 +98,16 @@ public final class Configuration
     }
 
     /**
+     * Gets a boolean value from the configuration.
+     *
+     * @param key The key to get boolean value for.
+     */
+    public boolean getBoolean(String key)
+    {
+        return Boolean.valueOf(configuration.get(key));
+    }
+
+    /**
      * Returns a set of sub-properties for a given prefix.
      *
      * @param prefix The prefix to get sub-properties for.

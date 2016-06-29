@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import com.antonjohansson.lprs.controller.ILdapFactory;
 import com.antonjohansson.lprs.controller.Ldap;
+import com.antonjohansson.lprs.controller.configuration.Configuration;
 import com.antonjohansson.lprs.controller.token.ITokenSender;
 import com.antonjohansson.lprs.controller.token.TokenGenerator;
 import com.antonjohansson.lprs.controller.validation.IValidationModel;
@@ -41,6 +42,7 @@ class ServicePresenter implements IServicePresenter
     private final ILdapFactory ldapFactory;
     private final Feedback feedback;
     private final ITokenSender tokenSender;
+    private final Configuration configuration;
     private final IValidationModel validationModel;
     private String token = "";
     private User user;
@@ -51,6 +53,7 @@ class ServicePresenter implements IServicePresenter
             ErrorView errorView, ILdapFactory ldapFactory,
             Feedback feedback,
             ITokenSender tokenSender,
+            Configuration configuration,
             IValidationModel validationModel)
     {
         this.view = view;
@@ -58,6 +61,7 @@ class ServicePresenter implements IServicePresenter
         this.ldapFactory = ldapFactory;
         this.feedback = feedback;
         this.tokenSender = tokenSender;
+        this.configuration = configuration;
         this.validationModel = validationModel;
     }
 
@@ -77,6 +81,12 @@ class ServicePresenter implements IServicePresenter
     @Override
     public void initialize()
     {
+        view.username.addValueChangeListener(event -> enableRequestTokenButton());
+        view.captcha.setVisible(configuration.getBoolean("recaptcha.enabled"));
+        view.captcha.setSiteKey(configuration.getOrDefault("recaptcha.site-key", ""));
+        view.captcha.setSecretKey(configuration.getOrDefault("recaptcha.secret-key", ""));
+        view.captcha.addCheckPassedListener(this::enableRequestTokenButton);
+        view.captcha.addPassedCheckExpiredListener(this::enableRequestTokenButton);
         view.requestToken.addClickListener(e -> requestToken());
         view.backFromUseToken.addClickListener(e -> view.clear());
         view.backFromSetPassword.addClickListener(e -> view.clear());
@@ -88,12 +98,36 @@ class ServicePresenter implements IServicePresenter
         errorView.setValidationErrors(validationModel.getValidationErrors());
     }
 
+    private boolean isRecaptchaVerified()
+    {
+        boolean recaptchaEnabled = configuration.getBoolean("recaptcha.enabled");
+        boolean recaptchaVerified = view.captcha.isVerified();
+
+        return recaptchaVerified
+            || !recaptchaEnabled;
+    }
+
+    private void enableRequestTokenButton()
+    {
+        boolean recaptchaVerified = isRecaptchaVerified();
+        boolean hasUsernameText = !view.username.getValue().isEmpty();
+
+        view.requestToken.setEnabled(recaptchaVerified && hasUsernameText);
+    }
+
     private void requestToken()
     {
+        boolean verified = isRecaptchaVerified();
+        if (!verified)
+        {
+            feedback.info("Verify yourself using the captcha.", view::clear);
+            return;
+        }
+
         String username = view.username.getValue();
         if (username.isEmpty())
         {
-            feedback.info("Username is required.");
+            feedback.info("Username is required.", view::clear);
             return;
         }
 

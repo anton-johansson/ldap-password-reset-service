@@ -16,11 +16,15 @@
 package com.antonjohansson.lprs.view;
 
 import static com.antonjohansson.lprs.view.ServiceView.Stage.REQUEST_TOKEN;
+import static com.antonjohansson.vaadin.recaptcha.options.RecaptchaSize.NORMAL;
+import static com.antonjohansson.vaadin.recaptcha.options.RecaptchaTheme.LIGHT;
+import static com.antonjohansson.vaadin.recaptcha.options.RecaptchaType.IMAGE;
 import static com.vaadin.server.Sizeable.Unit.EM;
 import static com.vaadin.ui.Alignment.MIDDLE_CENTER;
 
 import java.util.Optional;
 
+import com.antonjohansson.vaadin.recaptcha.Recaptcha;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -34,7 +38,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 class ServiceView extends VerticalLayout
 {
-    private static final float WIDTH_15 = 15.0F;
+    private static final float STANDARD_WIDTH = 18.9F;
 
     private final Layout requestTokenLayout;
     private final Layout useTokenLayout;
@@ -43,6 +47,7 @@ class ServiceView extends VerticalLayout
 
     // Components
     final TextField username = new TextField();
+    final Recaptcha captcha = new Recaptcha();
     final Button requestToken = new Button();
     final Label greeting = new Label();
     final TextField token = new TextField();
@@ -71,12 +76,16 @@ class ServiceView extends VerticalLayout
     private Layout requestTokenLayout()
     {
         username.setInputPrompt("Username");
-        username.setWidth(WIDTH_15, EM);
-
+        username.setWidth(STANDARD_WIDTH, EM);
+        captcha.setSize(NORMAL);
+        captcha.setTheme(LIGHT);
+        captcha.setType(IMAGE);
         requestToken.setCaption("Request token");
+        requestToken.setWidth(STANDARD_WIDTH, EM);
+        requestToken.setEnabled(false);
 
         VerticalLayout layout = new VerticalLayout();
-        layout.addComponents(username, requestToken);
+        layout.addComponents(username, captcha, requestToken);
         layout.setMargin(true);
         layout.setSpacing(true);
         layout.setVisible(false);
@@ -88,7 +97,7 @@ class ServiceView extends VerticalLayout
     private Layout useTokenLayout()
     {
         token.setInputPrompt("Token");
-        token.setWidth(WIDTH_15, EM);
+        token.setWidth(STANDARD_WIDTH, EM);
         useToken.setCaption("Next");
         backFromUseToken.setCaption("Back");
 
@@ -107,9 +116,9 @@ class ServiceView extends VerticalLayout
 
     private Layout setPasswordLayout()
     {
-        newPassword.setWidth(WIDTH_15, EM);
+        newPassword.setWidth(STANDARD_WIDTH, EM);
         newPassword.setCaption("Password");
-        newPasswordRepeat.setWidth(WIDTH_15, EM);
+        newPasswordRepeat.setWidth(STANDARD_WIDTH, EM);
         newPasswordRepeat.setCaption("Repeat password");
         setPassword.setCaption("Set password");
         backFromSetPassword.setCaption("Back");
@@ -132,6 +141,8 @@ class ServiceView extends VerticalLayout
      */
     void clear()
     {
+        captcha.reset();
+        requestToken.setEnabled(false);
         username.setValue("");
         greeting.setValue("");
         token.setValue("");
