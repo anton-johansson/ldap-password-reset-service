@@ -159,6 +159,11 @@
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.anton-johansson</groupId>
+            <artifactId>vaadin-recaptcha</artifactId>
+            <version>2.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
