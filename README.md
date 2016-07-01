@@ -29,6 +29,10 @@ token-sender = EmailTokenSender
 token-sender.host = hostname-to-smpt-server
 token-sender.from = sender@hostname.com
 
+# Spam protection
+#spam.request-count = 2
+#spam.expire-time = 30
+
 # reCAPTCHA protection
 recaptcha.enabled = true
 recaptcha.secret-key = my-secret-recaptcha-key
