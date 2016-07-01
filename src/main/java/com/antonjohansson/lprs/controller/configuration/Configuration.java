@@ -16,6 +16,7 @@
 package com.antonjohansson.lprs.controller.configuration;
 
 import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -101,10 +102,24 @@ public final class Configuration
      * Gets a boolean value from the configuration.
      *
      * @param key The key to get boolean value for.
+     * @return Returns the boolean value.
      */
     public boolean getBoolean(String key)
     {
         return Boolean.valueOf(configuration.get(key));
+    }
+
+    /**
+     * Gets an integer value from the configuration. If the value does not exist or if it is not a valid integer, {@code defaultValue} will be
+     * returned.
+     *
+     * @param key The key to get integer value for.
+     * @param defaultValue The default value to return.
+     * @return Returns the integer value.
+     */
+    public int getInteger(String key, int defaultValue)
+    {
+        return toInt(configuration.get(key), defaultValue);
     }
 
     /**

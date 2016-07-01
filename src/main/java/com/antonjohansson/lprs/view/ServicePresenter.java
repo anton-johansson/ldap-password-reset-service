@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import com.antonjohansson.lprs.controller.ILdapFactory;
 import com.antonjohansson.lprs.controller.Ldap;
 import com.antonjohansson.lprs.controller.configuration.Configuration;
+import com.antonjohansson.lprs.controller.spam.ISpamController;
 import com.antonjohansson.lprs.controller.token.ITokenSender;
 import com.antonjohansson.lprs.controller.token.TokenGenerator;
 import com.antonjohansson.lprs.controller.validation.IValidationModel;
@@ -42,6 +43,7 @@ class ServicePresenter implements IServicePresenter
     private final ILdapFactory ldapFactory;
     private final Feedback feedback;
     private final ITokenSender tokenSender;
+    private final ISpamController spamController;
     private final Configuration configuration;
     private final IValidationModel validationModel;
     private String token = "";
@@ -50,9 +52,11 @@ class ServicePresenter implements IServicePresenter
     @Inject
     ServicePresenter(
             ServiceView view,
-            ErrorView errorView, ILdapFactory ldapFactory,
+            ErrorView errorView,
+            ILdapFactory ldapFactory,
             Feedback feedback,
             ITokenSender tokenSender,
+            ISpamController spamController,
             Configuration configuration,
             IValidationModel validationModel)
     {
@@ -61,6 +65,7 @@ class ServicePresenter implements IServicePresenter
         this.ldapFactory = ldapFactory;
         this.feedback = feedback;
         this.tokenSender = tokenSender;
+        this.spamController = spamController;
         this.configuration = configuration;
         this.validationModel = validationModel;
     }
@@ -147,6 +152,12 @@ class ServicePresenter implements IServicePresenter
 
     private void requestToken(User user)
     {
+        if (!spamController.check(user.getUserPrincipalName()))
+        {
+            feedback.info("You have requested a token too many times, please wait a while.", view::clear);
+            return;
+        }
+
         if (user.getTelephoneNumber().isEmpty())
         {
             feedback.info("Your user have no cellphone number.", view::clear);

@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.antonjohansson.lprs.controller;
+package com.antonjohansson.lprs.controller.spam;
 
-import static com.google.inject.Scopes.SINGLETON;
-
-import com.antonjohansson.lprs.controller.configuration.ConfigurationModule;
-import com.antonjohansson.lprs.controller.spam.SpamModule;
-import com.antonjohansson.lprs.controller.token.TokenModule;
-import com.antonjohansson.lprs.controller.validation.ValidationModule;
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 
 /**
- * Contains IOC-bindings for the controllers.
+ * Contains IOC bindings for the spam module.
  */
-public class ControllerModule extends AbstractModule
+public class SpamModule extends AbstractModule
 {
     @Override
     protected void configure()
     {
-        bind(ILdapFactory.class).to(LdapFactory.class).in(SINGLETON);
-        install(new ConfigurationModule());
-        install(new SpamModule());
-        install(new TokenModule());
-        install(new ValidationModule());
+        bind(ISpamController.class).to(SpamController.class).in(Singleton.class);
     }
 }
