@@ -49,10 +49,10 @@ public class ConfigurationModule extends AbstractModule
 
             return new Configuration(
                     properties.entrySet()
-                    .stream()
-                    .collect(toMap(
-                            entry -> (String) entry.getKey(),
-                            entry -> (String) entry.getValue())));
+                            .stream()
+                            .collect(toMap(
+                                    entry -> (String) entry.getKey(),
+                                    entry -> (String) entry.getValue())));
         }
         catch (IOException e)
         {

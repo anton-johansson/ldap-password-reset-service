@@ -31,8 +31,7 @@ public interface ITokenSender
     void send(User user, String token);
 
     /**
-     * Gets the message that is shown when a token is successfully sent, for
-     * example "Check your phone.".
+     * Gets the message that is shown when a token is successfully sent, for example "Check your phone.".
      *
      * @return Returns the message to show upon success.
      */

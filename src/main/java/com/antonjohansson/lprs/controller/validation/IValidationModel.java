@@ -38,7 +38,7 @@ public interface IValidationModel
 
     /**
      * Gets whether or not the validation model is valid.
-     * 
+     *
      * @return Returns {@code true} if the model is valid.
      */
     default boolean isValid()
