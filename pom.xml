@@ -34,10 +34,26 @@
     <description>Provides a web GUI for resetting an LDAP account's password.</description>
     <url>https://github.com/anton-johansson/ldap-password-reset-service</url>
 
+    <organization />
+
+    <developers>
+        <developer>
+            <id>anton-johansson</id>
+            <name>Anton Johansson</name>
+            <email>antoon.johansson@gmail.com</email>
+        </developer>
+    </developers>
+
     <issueManagement>
         <url>https://github.com/anton-johansson/ldap-password-reset-service/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
+
+    <scm>
+        <url>https://github.com/anton-johansson/ldap-password-reset-service</url>
+        <connection>scm:git:git://github.com/anton-johansson/ldap-password-reset-service.git</connection>
+        <developerConnection>scm:git:git@github.com:anton-johansson/ldap-password-reset-service.git</developerConnection>
+    </scm>
 
     <licenses>
         <license>
@@ -46,12 +62,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <scm>
-        <url>https://github.com/anton-johansson/ldap-password-reset-service</url>
-        <connection>scm:git:git://github.com/anton-johansson/ldap-password-reset-service.git</connection>
-        <developerConnection>scm:git:git@github.com:anton-johansson/ldap-password-reset-service.git</developerConnection>
-    </scm>
 
     <properties>
         <!-- Dependencies -->
@@ -307,8 +317,6 @@
                             </paths>
                             <mapper>
                                 <type>perm</type>
-                                <user>brooklyn</user>
-                                <group>brooklyn</group>
                             </mapper>
                         </data>
 
