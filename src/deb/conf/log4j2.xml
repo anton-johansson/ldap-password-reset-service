@@ -18,13 +18,16 @@
 -->
 <Configuration>
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
+        <RollingFile name="RollingFile" fileName="/var/log/ldap-password-reset-service/ldap-password-reset-service.log" filePattern="/var/log/ldap-password-reset-service/ldap-password-reset-service-%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-16X{remoteAddress} %-5level %logger{36} - %msg%n" />
-        </Console>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="DEBUG">
-            <AppenderRef ref="Console" />
+        <Root level="INFO">
+            <AppenderRef ref="RollingFile" />
         </Root>
     </Loggers>
 </Configuration>
