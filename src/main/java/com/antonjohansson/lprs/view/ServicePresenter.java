@@ -23,6 +23,9 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.antonjohansson.lprs.controller.ILdapFactory;
 import com.antonjohansson.lprs.controller.Ldap;
 import com.antonjohansson.lprs.controller.configuration.Configuration;
@@ -38,6 +41,8 @@ import com.vaadin.ui.Layout;
  */
 class ServicePresenter implements IServicePresenter
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ServicePresenter.class);
+
     private final ServiceView view;
     private final ErrorView errorView;
     private final ILdapFactory ldapFactory;
@@ -154,18 +159,21 @@ class ServicePresenter implements IServicePresenter
     {
         if (!spamController.check(user.getUserPrincipalName()))
         {
+            LOG.warn("Request for '{}' was denied due to too many requests", user.getUserPrincipalName());
             feedback.info("You have requested a token too many times, please wait a while.", view::clear);
             return;
         }
 
         if (user.getTelephoneNumber().isEmpty())
         {
+            LOG.warn("User '{}' has no telephone number", user.getUserPrincipalName());
             feedback.info("Your user have no cellphone number.", view::clear);
             return;
         }
 
         this.user = user;
         this.token = TokenGenerator.generate();
+        LOG.info("Sending token '{}' to '{}'", token, user.getUserPrincipalName());
         tokenSender.send(user, token);
 
         String greeting = "Greetings, " + user.getName() + "! " + tokenSender.getSuccessMessage();
@@ -213,10 +221,12 @@ class ServicePresenter implements IServicePresenter
             boolean success = ldap.setPassword(user.getDistinguishedName(), password);
             if (success)
             {
+                LOG.info("Successfully set new password for user '{}'", user.getUserPrincipalName());
                 feedback.info("Successfully updated password!", view::clear);
             }
             else
             {
+                LOG.info("Requested password for user '{}' did not meet the requirements", user.getUserPrincipalName());
                 feedback.info("The password does not meet the requirements", this::clearPasswordFields);
             }
         }

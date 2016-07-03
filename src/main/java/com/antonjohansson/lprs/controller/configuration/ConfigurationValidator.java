@@ -20,6 +20,9 @@ import static com.antonjohansson.lprs.controller.configuration.Configuration.PAS
 import static com.antonjohansson.lprs.controller.configuration.Configuration.PROVIDER_URL;
 import static com.antonjohansson.lprs.controller.configuration.Configuration.USERNAME;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.antonjohansson.lprs.controller.validation.IValidationModel;
 import com.google.inject.Inject;
 
@@ -28,6 +31,8 @@ import com.google.inject.Inject;
  */
 class ConfigurationValidator
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationValidator.class);
+
     private final Configuration configuration;
     private final IValidationModel model;
 
@@ -45,13 +50,17 @@ class ConfigurationValidator
         assertExists(DOMAIN);
         assertExists(USERNAME);
         assertExists(PASSWORD);
+
+        LOG.info("Configuration validated");
     }
 
     private void assertExists(String key)
     {
         if (!configuration.get(key).isPresent())
         {
-            model.addValidationError("The key '" + key + "' is required in the configuration");
+            String message = "The key '" + key + "' is required in the configuration";
+            LOG.error(message);
+            model.addValidationError(message);
         }
     }
 }
