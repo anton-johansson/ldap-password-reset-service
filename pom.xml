@@ -374,6 +374,18 @@
                                 <filemode>600</filemode>
                             </mapper>
                         </data>
+
+                        <!-- Logging configuration file -->
+                        <data>
+                            <src>${basedir}/src/deb/conf/log4j2.xml</src>
+                            <type>file</type>
+                            <conffile>true</conffile>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>/etc/${project.artifactId}</prefix>
+                                <filemode>600</filemode>
+                            </mapper>
+                        </data>
                     </dataSet>
                 </configuration>
                 <executions>
