@@ -25,11 +25,11 @@ import com.antonjohansson.lprs.model.User;
  */
 class ConsoleTokenSender implements ITokenSender
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleTokenSender.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConsoleTokenSender.class);
 
     @Override
     public void send(User user, String token)
     {
-        LOGGER.info("Generated token '{}'", token);
+        LOG.info("Generated token '{}'", token);
     }
 }
