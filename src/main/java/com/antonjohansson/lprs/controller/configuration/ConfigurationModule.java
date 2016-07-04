@@ -26,6 +26,7 @@ import java.util.Properties;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 
 /**
  * Provides the {@link Configuration configuration}.
@@ -39,6 +40,7 @@ public class ConfigurationModule extends AbstractModule
     }
 
     @Provides
+    @Singleton
     Configuration configuration()
     {
         File configurationFile = getConfigurationFile();
