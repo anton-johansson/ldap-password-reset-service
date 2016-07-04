@@ -289,6 +289,12 @@
                 <version>${jetty.version}</version>
                 <configuration>
                     <scanIntervalSeconds>2</scanIntervalSeconds>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>developmentMode</name>
+                            <value>true</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
 
