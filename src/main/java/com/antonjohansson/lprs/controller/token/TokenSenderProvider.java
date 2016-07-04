@@ -20,6 +20,8 @@ import java.util.function.Supplier;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.antonjohansson.lprs.controller.configuration.Configuration;
 import com.antonjohansson.lprs.controller.validation.IValidationModel;
@@ -31,6 +33,8 @@ import com.google.inject.Provider;
  */
 class TokenSenderProvider implements Provider<ITokenSender>
 {
+    private static final Logger LOG = LoggerFactory.getLogger(TokenSenderProvider.class);
+
     private final Configuration configuration;
     private final IValidationModel validationModel;
 
@@ -51,7 +55,9 @@ class TokenSenderProvider implements Provider<ITokenSender>
     {
         Supplier<ITokenSender> consoleTokenSenderSupplier = () ->
         {
-            validationModel.addValidationError("Could not find token sender implementation with name '" + getTokenSenderName() + "'");
+            String message = "Could not find token sender implementation with name '" + getTokenSenderName() + "'";
+            LOG.warn(message);
+            validationModel.addValidationError(message);
             return new ConsoleTokenSender();
         };
 
@@ -78,6 +84,7 @@ class TokenSenderProvider implements Provider<ITokenSender>
         }
         catch (InstantiationException | IllegalAccessException e)
         {
+            LOG.error("Exception occurred when creating the ITokenSender implementation", e);
             validationModel.addValidationError("Could not create token sender instance: " + e.getMessage());
             return new ConsoleTokenSender();
         }
@@ -96,7 +103,7 @@ class TokenSenderProvider implements Provider<ITokenSender>
                     }
                     catch (Exception e)
                     {
-                        // LOG
+                        LOG.error("Exception occurred when setting property '" + entry.getKey() + "' on the ITokenSender implementation", e);
                     }
                 });
     }

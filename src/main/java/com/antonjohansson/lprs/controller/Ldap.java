@@ -38,6 +38,9 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.InitialLdapContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.antonjohansson.lprs.model.User;
 
 /**
@@ -45,6 +48,7 @@ import com.antonjohansson.lprs.model.User;
  */
 public class Ldap implements AutoCloseable
 {
+    private static final Logger LOG = LoggerFactory.getLogger(Ldap.class);
     private static final String[] USER_ATTRIBUTES = {"distinguishedName", "userPrincipalName", "name", "mail", "telephoneNumber"};
 
     private final InitialLdapContext context;
@@ -84,6 +88,8 @@ public class Ldap implements AutoCloseable
      */
     public Optional<User> getUserByName(String username)
     {
+        LOG.debug("Finding user with username '{}'", username);
+
         SearchControls controls = new SearchControls();
         controls.setSearchScope(SUBTREE_SCOPE);
         controls.setReturningAttributes(USER_ATTRIBUTES);
@@ -108,13 +114,18 @@ public class Ldap implements AutoCloseable
                 user.setName(name);
                 user.setMail(mail);
                 user.setTelephoneNumber(telephoneNumber);
+
+                LOG.debug("Found user '{}'", name);
                 return Optional.of(user);
             }
+
+            LOG.debug("No user was found");
             return Optional.empty();
         }
         catch (NamingException e)
         {
-            throw new RuntimeException(e);
+            LOG.warn("Exception occurred when looking up user", e);
+            return Optional.empty();
         }
     }
 
@@ -126,6 +137,8 @@ public class Ldap implements AutoCloseable
      */
     public boolean setPassword(String distinguishedName, String password)
     {
+        LOG.debug("Setting password for user '{}'", distinguishedName);
+
         String quotedPassword = "\"" + password + "\"";
         char[] unicodePwd = quotedPassword.toCharArray();
         byte[] passwordArray = new byte[unicodePwd.length * 2];
@@ -149,12 +162,13 @@ public class Ldap implements AutoCloseable
         {
             if (e.getMessage().startsWith("[LDAP: error code 53"))
             {
-                return false;
+                LOG.debug("Password did not meet the requirements");
             }
             else
             {
-                throw new RuntimeException(e);
+                LOG.error("Exception occurred when setting password", e);
             }
+            return false;
         }
     }
 
@@ -178,11 +192,12 @@ public class Ldap implements AutoCloseable
     {
         try
         {
+            LOG.debug("Closing the LDAP connection");
             context.close();
         }
         catch (NamingException e)
         {
-            throw new RuntimeException(e);
+            LOG.error("Error occurred when closing the LDAP connection", e);
         }
     }
 }

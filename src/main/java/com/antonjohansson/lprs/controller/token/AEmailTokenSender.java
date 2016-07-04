@@ -24,6 +24,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.antonjohansson.lprs.model.User;
 
 /**
@@ -31,6 +34,8 @@ import com.antonjohansson.lprs.model.User;
  */
 public abstract class AEmailTokenSender implements ITokenSender
 {
+    private static final Logger LOG = LoggerFactory.getLogger(AEmailTokenSender.class);
+
     private String host;
 
     public void setHost(String host)
@@ -48,9 +53,14 @@ public abstract class AEmailTokenSender implements ITokenSender
 
         try
         {
+            String from = getFrom();
+            String to = getTo(user);
+
+            LOG.info("Sending email from '{}' to '{}' using '{}'", from, to, host);
+
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(getFrom()));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(getTo(user)));
+            message.setFrom(new InternetAddress(from));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(getSubject());
             message.setContent(getBody(token), getContentType());
 
@@ -58,7 +68,7 @@ public abstract class AEmailTokenSender implements ITokenSender
         }
         catch (MessagingException e)
         {
-            throw new RuntimeException(e);
+            LOG.error("Exception occurred when sending e-mail", e);
         }
     }
 

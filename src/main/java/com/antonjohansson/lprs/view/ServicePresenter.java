@@ -91,12 +91,14 @@ class ServicePresenter implements IServicePresenter
     @Override
     public void initialize()
     {
+        LOG.debug("Initializing presenter");
+
         view.username.addValueChangeListener(event -> enableRequestTokenButton());
         view.captcha.setVisible(configuration.getBoolean("recaptcha.enabled"));
         view.captcha.setSiteKey(configuration.getOrDefault("recaptcha.site-key", ""));
         view.captcha.setSecretKey(configuration.getOrDefault("recaptcha.secret-key", ""));
-        view.captcha.addCheckPassedListener(this::enableRequestTokenButton);
-        view.captcha.addPassedCheckExpiredListener(this::enableRequestTokenButton);
+        view.captcha.addCheckPassedListener(this::checkPassedHandler);
+        view.captcha.addPassedCheckExpiredListener(this::passedCheckExpiredHandler);
         view.requestToken.addClickListener(e -> requestToken());
         view.backFromUseToken.addClickListener(e -> view.clear());
         view.backFromSetPassword.addClickListener(e -> view.clear());
@@ -106,6 +108,8 @@ class ServicePresenter implements IServicePresenter
         view.show(REQUEST_TOKEN);
 
         errorView.setValidationErrors(validationModel.getValidationErrors());
+
+        LOG.debug("Initialized presenter");
     }
 
     private boolean isRecaptchaVerified()
@@ -115,6 +119,18 @@ class ServicePresenter implements IServicePresenter
 
         return recaptchaVerified
             || !recaptchaEnabled;
+    }
+
+    private void checkPassedHandler()
+    {
+        LOG.debug("Captcha passed");
+        enableRequestTokenButton();
+    }
+
+    private void passedCheckExpiredHandler()
+    {
+        LOG.debug("Captcha pass expired");
+        enableRequestTokenButton();
     }
 
     private void enableRequestTokenButton()
@@ -130,6 +146,7 @@ class ServicePresenter implements IServicePresenter
         boolean verified = isRecaptchaVerified();
         if (!verified)
         {
+            LOG.warn("Captcha was not verified");
             feedback.info("Verify yourself using the captcha.", view::clear);
             return;
         }
@@ -146,6 +163,7 @@ class ServicePresenter implements IServicePresenter
             Optional<User> user = ldap.getUserByName(username);
             if (user.isPresent())
             {
+                LOG.debug("Requesting token for user '{}'", user.get().getUserPrincipalName());
                 requestToken(user.get());
             }
             else

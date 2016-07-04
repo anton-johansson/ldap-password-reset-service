@@ -21,6 +21,9 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.antonjohansson.lprs.controller.configuration.Configuration;
 import com.google.common.cache.Cache;
 import com.google.inject.Inject;
@@ -30,6 +33,8 @@ import com.google.inject.Inject;
  */
 class SpamController implements ISpamController
 {
+    private static final Logger LOG = LoggerFactory.getLogger(SpamController.class);
+
     private static final Object EMPTY = new Object();
     private static final int DEFAULT_REQUEST_COUNT = 2;
     private static final int DEFAULT_EXPIRE_TIME = 30;
@@ -55,8 +60,10 @@ class SpamController implements ISpamController
     @Override
     public boolean check(String user)
     {
+        LOG.debug("Checking spam detection for user '{}'", user);
         if (!isSpamDetectionEnabled())
         {
+            LOG.debug("Spam detection is disabled");
             return true;
         }
 
@@ -67,10 +74,12 @@ class SpamController implements ISpamController
         cache.cleanUp();
         if (cache.size() < requestCount)
         {
+            LOG.debug("Spam detection OK!");
             cache.asMap().put(new Date(), EMPTY);
             return true;
         }
 
+        LOG.debug("Spam detection not OK!");
         return false;
     }
 
