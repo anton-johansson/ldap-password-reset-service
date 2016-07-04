@@ -20,6 +20,7 @@ import static org.eclipse.jetty.servlet.ServletContextHandler.SESSIONS;
 
 import javax.servlet.DispatcherType;
 
+import org.apache.logging.log4j.jul.LogManager;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -39,6 +40,8 @@ public class Application
      */
     public static void main(String[] args) throws Exception
     {
+        System.setProperty("java.util.logging.manager", LogManager.class.getName());
+
         try
         {
             Injector injector = Guice.createInjector(new ServiceModule());
