@@ -15,6 +15,9 @@
  */
 package com.antonjohansson.lprs.controller.token;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.antonjohansson.lprs.model.User;
 
 /**
@@ -22,9 +25,11 @@ import com.antonjohansson.lprs.model.User;
  */
 class ConsoleTokenSender implements ITokenSender
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleTokenSender.class);
+
     @Override
     public void send(User user, String token)
     {
-        System.out.println("Generated token '" + token + "'.");
+        LOGGER.info("Generated token '{}'", token);
     }
 }
