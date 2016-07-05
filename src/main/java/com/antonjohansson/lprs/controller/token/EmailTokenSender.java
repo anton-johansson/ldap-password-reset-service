@@ -15,6 +15,11 @@
  */
 package com.antonjohansson.lprs.controller.token;
 
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.antonjohansson.lprs.model.User;
 
 /**
@@ -22,6 +27,8 @@ import com.antonjohansson.lprs.model.User;
  */
 public class EmailTokenSender extends AEmailTokenSender
 {
+    private static final Logger LOG = LoggerFactory.getLogger(EmailTokenSender.class);
+
     private String from;
 
     public void setFrom(String from)
@@ -63,5 +70,16 @@ public class EmailTokenSender extends AEmailTokenSender
     public String getSuccessMessage()
     {
         return "Check your e-mail.";
+    }
+
+    @Override
+    public Optional<String> isValid(User user)
+    {
+        if (user.getMail().isEmpty())
+        {
+            LOG.warn("The user '{}' has no e-mail address", user.getUserPrincipalName());
+            return Optional.of("Your user have no e-mail address.");
+        }
+        return Optional.empty();
     }
 }

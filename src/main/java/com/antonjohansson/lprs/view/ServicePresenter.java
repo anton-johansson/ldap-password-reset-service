@@ -182,10 +182,10 @@ class ServicePresenter implements IServicePresenter
             return;
         }
 
-        if (user.getTelephoneNumber().isEmpty())
+        Optional<String> tokenSenderMessage = tokenSender.isValid(user);
+        if (tokenSenderMessage.isPresent())
         {
-            LOG.warn("User '{}' has no telephone number", user.getUserPrincipalName());
-            feedback.info("Your user have no cellphone number.", view::clear);
+            feedback.info(tokenSenderMessage.get(), view::clear);
             return;
         }
 

@@ -15,6 +15,8 @@
  */
 package com.antonjohansson.lprs.controller.token;
 
+import java.util.Optional;
+
 import com.antonjohansson.lprs.model.User;
 
 /**
@@ -38,5 +40,19 @@ public interface ITokenSender
     default String getSuccessMessage()
     {
         return "";
+    }
+
+    /**
+     * Checks if a given {@code user} is valid.
+     * <p>
+     * If it isn't valid, an informational message is returned that is shown to the consumer.
+     * </p>
+     *
+     * @param user The user to check.
+     * @return Returns the optional validation message.
+     */
+    default Optional<String> isValid(User user)
+    {
+        return Optional.empty();
     }
 }
