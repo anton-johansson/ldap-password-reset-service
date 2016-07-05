@@ -1,9 +1,10 @@
 # LDAP Password Reset Service
 
+[![Build Status](https://img.shields.io/travis/anton-johansson/ldap-password-reset-service/master.svg)](https://travis-ci.org/anton-johansson/ldap-password-reset-service)
+[![License](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/anton-johansson/ldap-password-reset-service/master/LICENSE)
+
 Provides a simple web service for resetting LDAP user passwords.
 
-[![Build Status](https://img.shields.io/travis/anton-johansson/ldap-password-reset-service/master.svg?style=flat-square)](https://travis-ci.org/anton-johansson/ldap-password-reset-service)
-[![License](https://img.shields.io/github/license/anton-johansson/ldap-password-reset-service.svg?style=flat-square)](../master/LICENSE)
 
 ## Development
 
