@@ -9,13 +9,13 @@ Provides a simple web service for resetting LDAP user passwords.
 ## Development
 
 #### Running in development mode
-```mvn jetty:run -DconfigurationFile=/home/user/ldap-password-reset-service.properties```
+```mvn jetty:run -DconfigurationFile=/home/user/ldap-password-reset-service.conf```
 
 #### Building a package
 ```mvn clean install package```
 
 #### Running the package
-```java -DconfigurationFile=/home/viantjoh/ldap.properties -cp "target/ldap-password-reset-service-1.0.0-SNAPSHOT.jar:target/lib/*" com.antonjohansson.lprs.Application```
+```java -DconfigurationFile=/home/user/ldap-password-reset-service.conf -cp "target/ldap-password-reset-service-1.0.0-SNAPSHOT.jar:target/lib/*" com.antonjohansson.lprs.Application```
 
 #### Configuration
 ```
