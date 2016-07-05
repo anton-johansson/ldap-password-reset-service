@@ -15,7 +15,7 @@ Provides a simple web service for resetting LDAP user passwords.
 ```mvn clean install package```
 
 #### Running the package
-```java -jar -DconfigurationFile=/etc/ldap-password-reset-service/configuration.properties target/ldap-password-reset-service-1.0.0-SNAPSHOT-jar-with-dependencies.jar```
+```java -DconfigurationFile=/home/viantjoh/ldap.properties -cp "target/ldap-password-reset-service-1.0.0-SNAPSHOT.jar:target/lib/*" com.antonjohansson.lprs.Application```
 
 #### Configuration
 ```
