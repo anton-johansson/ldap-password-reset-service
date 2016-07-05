@@ -24,6 +24,9 @@ domain = domain.local
 username = user
 password = password
 
+# Web service settings
+#port = 8080
+
 # How to send access tokens?
 token-sender = EmailTokenSender
 token-sender.host = hostname-to-smpt-server
