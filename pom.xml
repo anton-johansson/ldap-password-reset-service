@@ -298,27 +298,18 @@
                 </configuration>
             </plugin>
 
-            <!-- Create a runnable JAR -->
+            <!-- Copy dependencies -->
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.antonjohansson.lprs.Application</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -366,9 +357,19 @@
 
                         <!-- The JAR file -->
                         <data>
-                            <src>${project.build.directory}/${project.build.finalName}-jar-with-dependencies.jar</src>
+                            <src>${project.build.directory}/${project.build.finalName}.jar</src>
                             <dst>${project.artifactId}.jar</dst>
                             <type>file</type>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>/var/lib/${project.artifactId}/bin</prefix>
+                            </mapper>
+                        </data>
+
+                        <!-- Dependencies -->
+                        <data>
+                            <src>${project.build.directory}/lib</src>
+                            <type>directory</type>
                             <mapper>
                                 <type>perm</type>
                                 <prefix>/var/lib/${project.artifactId}/bin</prefix>
