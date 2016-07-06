@@ -8,7 +8,7 @@ cache:
 
 before_deploy:
   - mvn package
-  - export DEB_FILE=$(ls target/ldap-password-reset-service*.dep)
+  - export DEB_FILE=$(ls target/ldap-password-reset-service*.deb)
 
 deploy:
   provider: releases
