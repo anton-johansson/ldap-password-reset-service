@@ -27,10 +27,10 @@
     </Appenders>
     <Loggers>
         <Root level="WARN">
-            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
         </Root>
         <Logger name="com.antonjohansson.lprs" level="INFO" additivity="false">
-            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
         </Logger>
     </Loggers>
 </Configuration>
