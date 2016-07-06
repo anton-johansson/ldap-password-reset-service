@@ -19,13 +19,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.viskan</groupId>
         <artifactId>parent</artifactId>
         <version>3</version>
     </parent>
-
     <groupId>com.anton-johansson</groupId>
     <artifactId>ldap-password-reset-service</artifactId>
     <packaging>jar</packaging>
@@ -65,17 +63,19 @@
 
     <properties>
         <!-- Dependencies -->
-        <vaadin.version>7.6.6</vaadin.version>
+        <guice.version>4.1.0</guice.version>
+        <javax.mail.version>1.5.5</javax.mail.version>
         <jetty.version>9.3.9.v20160517</jetty.version>
         <log4j.version>2.6.1</log4j.version>
-        <guice.version>4.1.0</guice.version>
+        <vaadin.version>7.6.6</vaadin.version>
 
         <!-- Build -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.source.skip>true</maven.source.skip>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <repositories>
@@ -114,15 +114,15 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
             <artifactId>vaadin-client-compiled</artifactId>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-push</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client</artifactId>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -161,12 +161,12 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>javax.mail-api</artifactId>
-            <version>1.5.5</version>
+            <version>${javax.mail.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
-            <version>1.5.5</version>
+            <version>${javax.mail.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
