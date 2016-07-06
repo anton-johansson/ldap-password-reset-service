@@ -23,6 +23,7 @@
             <Policies>
                 <TimeBasedTriggeringPolicy modulate="true" interval="1" />
             </Policies>
+            <DefaultRolloverStrategy max="14" />
         </RollingFile>
     </Appenders>
     <Loggers>
