@@ -46,19 +46,19 @@ class ConfigurationValidator
 
     private void validate()
     {
-        assertExists(PROVIDER_URL);
-        assertExists(DOMAIN);
-        assertExists(USERNAME);
-        assertExists(PASSWORD);
+        assertNotEmpty(PROVIDER_URL);
+        assertNotEmpty(DOMAIN);
+        assertNotEmpty(USERNAME);
+        assertNotEmpty(PASSWORD);
 
         LOG.info("Configuration validated");
     }
 
-    private void assertExists(String key)
+    private void assertNotEmpty(String key)
     {
-        if (!configuration.get(key).isPresent())
+        if (configuration.get(key).orElse("").isEmpty())
         {
-            String message = "The key '" + key + "' is required in the configuration";
+            String message = "The key '" + key + "' must have a value.";
             LOG.error(message);
             model.addValidationError(message);
         }
