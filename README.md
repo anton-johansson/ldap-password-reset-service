@@ -6,6 +6,13 @@
 Provides a simple web service for resetting LDAP user passwords.
 
 
+## Installing
+```
+wget https://github.com/anton-johansson/ldap-password-reset-service/releases/download/v1.0.0/ldap-password-reset-service_1.0.0_all.deb
+dpkg --install ldap-password-reset-service_1.0.0_all.deb
+```
+
+
 ## Development
 
 #### Running in development mode
@@ -17,7 +24,8 @@ Provides a simple web service for resetting LDAP user passwords.
 #### Running the package
 ```java -DconfigurationFile=/home/user/ldap-password-reset-service.conf -cp "target/ldap-password-reset-service-1.0.0-SNAPSHOT.jar:target/lib/*" com.antonjohansson.lprs.Application```
 
-#### Configuration
+
+## Configuration
 ```
 # LDAP settings
 provider-url = ldaps://hostname:636
