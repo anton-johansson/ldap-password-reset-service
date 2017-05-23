@@ -7,7 +7,19 @@ Provides a simple web service for resetting LDAP user passwords.
 
 
 ## Installing
+
+#### Repository
+
+```shell
+echo 'deb [arch=all] http://apt.anton-johansson.com/ stable main' > /etc/apt/sources.list.d/anton-johansson.list
+curl -fsSL http://apt.anton-johansson.com/signing-key.pub | sudo apt-key add -
+sudo apt update
+sudo apt install ldap-password-reset-service
 ```
+
+#### Manual
+
+```shell
 wget https://github.com/anton-johansson/ldap-password-reset-service/releases/download/v1.0.0/ldap-password-reset-service_1.0.0_all.deb
 dpkg --install ldap-password-reset-service_1.0.0_all.deb
 ```
